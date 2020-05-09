@@ -1,6 +1,4 @@
-# webpack 配置（下）
+# Freact
 
-## 使用方法
+React轮子,个人学习向
 
-1. yarn install
-2. yarn start
