@@ -1,5 +1,3 @@
-// import * as renderer from 'react-test-renderer'
-// import React from 'react'
 import { classnames } from '../classnames'
 
 describe('classnames', () => {

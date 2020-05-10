@@ -2,7 +2,7 @@ import React, { SVGAttributes } from 'react'
 // import './icons/wechat.svg'
 import './importAll' // 这样就不能treeshaking了
 import './icons.scss'
-import { classnames } from './helpers/classnames'
+import { classnames } from '../helpers/classnames'
 interface Props extends SVGAttributes<SVGElement> {
   icon: string
 }
