@@ -1,15 +1,18 @@
-import React from 'react'
+import React, { SVGAttributes } from 'react'
 // import './icons/wechat.svg'
 import './importAll' // 这样就不能treeshaking了
 import './icons.scss'
-type Props = {
-  icon: string,
-  onClick?: React.MouseEventHandler<SVGUseElement | SVGElement>
+import {classnames} from './helpers/classnames'
+interface Props extends SVGAttributes<SVGElement> {
+  icon: string
 }
 // console.log(wechat)
-const Icon: React.FC<Props> = ({ icon, onClick }) => {
+const Icon: React.FC<Props> = ({className, icon, ...rest}) => {
   return (
-    <svg className="freact-icon" onClick={onClick}>
+    <svg 
+      className={classnames('freact-icon', className)}
+      {...rest}
+    >
       <use xlinkHref={`#${icon}`}></use>
       {/*name就是icons里的文件名*/}
     </svg>
