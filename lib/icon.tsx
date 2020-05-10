@@ -1,11 +1,17 @@
 import React from 'react'
-
+// import './icons/wechat.svg'
+import './importAll'
 interface Props {
   icon: string
 }
+// console.log(wechat)
 const Icon:React.FC<Props> = ({icon}) => {
   return (
-  <span>{icon}</span>
+    <span>
+      <svg>
+        <use xlinkHref={`#${icon}`}></use>
+      </svg>
+    </span>
   )
 } 
 
