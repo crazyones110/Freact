@@ -1,18 +1,19 @@
 import React from 'react'
 // import './icons/wechat.svg'
-import './importAll'
-interface Props {
-  icon: string
+import './importAll' // 这样就不能treeshaking了
+import './icons.scss'
+type Props = {
+  icon: string,
+  className?: string
 }
 // console.log(wechat)
-const Icon:React.FC<Props> = ({icon}) => {
+const Icon: React.FC<Props> = ({ icon, className }) => {
   return (
-    <span>
-      <svg>
-        <use xlinkHref={`#${icon}`}></use>
-      </svg>
-    </span>
+    <svg className="freact-icon">
+      <use xlinkHref={`#${icon}`}></use>
+      {/*name就是icons里的文件名*/}
+    </svg>
   )
-} 
+}
 
 export default Icon

@@ -22,6 +22,11 @@ module.exports = {
         test: /\.svg$/,
         loader: 'svg-sprite-loader'
       },
+      {
+        test: /\.s[ac]ss$/,
+        // 多个loader要写这个use数组,顺序是从右往左 
+        use:['style-loader', 'css-loader', 'sass-loader']
+      }
     ],
   },
 }
