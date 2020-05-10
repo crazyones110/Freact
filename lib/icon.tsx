@@ -4,12 +4,12 @@ import './importAll' // 这样就不能treeshaking了
 import './icons.scss'
 type Props = {
   icon: string,
-  className?: string
+  onClick?: React.MouseEventHandler<SVGUseElement | SVGElement>
 }
 // console.log(wechat)
-const Icon: React.FC<Props> = ({ icon, className }) => {
+const Icon: React.FC<Props> = ({ icon, onClick }) => {
   return (
-    <svg className="freact-icon">
+    <svg className="freact-icon" onClick={onClick}>
       <use xlinkHref={`#${icon}`}></use>
       {/*name就是icons里的文件名*/}
     </svg>
