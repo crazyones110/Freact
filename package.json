@@ -12,15 +12,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/FrankFang/frank-test-2.git"
+    "url": "git+https://github.com/crazyones110/Freact.git"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/FrankFang/frank-test-2/issues"
+    "url": "https://github.com/crazyones110/Freact/issues"
   },
-  "homepage": "https://github.com/FrankFang/frank-test-2#readme",
+  "homepage": "https://github.com/crazyones110/Freact#readme",
   "devDependencies": {
     "@babel/preset-env": "^7.3.4",
     "@babel/preset-react": "^7.0.0",
