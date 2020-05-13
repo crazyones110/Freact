@@ -1,4 +1,9 @@
 .freact-icon {
   width: 1em;
   height: 1em;
+  use {
+    // color: blue;
+    // fill: blue;
+  }
+  fill: currentColor;
 }
