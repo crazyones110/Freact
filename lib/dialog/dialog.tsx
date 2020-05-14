@@ -11,7 +11,7 @@ type Props = {
   onClose: React.MouseEventHandler
   closeMaskOnClick?: boolean
 }
-// FIXME 解决每次都写freact-dialog的问题
+
 const dialogClasses = createMakeClasses('freact-dialog')
 const dc = dialogClasses
 
@@ -41,7 +41,8 @@ export const Dialog: React.FC<Props> = ({
         <main>{children}</main>
         {buttons && (
           <footer className={dc('footer')}>
-            {buttons && buttons.length > 0 &&
+            {buttons &&
+              buttons.length > 0 &&
               buttons.map((button, index) =>
                 React.cloneElement(button, {
                   key: index,
@@ -58,9 +59,8 @@ Dialog.defaultProps = {
   closeMaskOnClick: false,
 }
 
-
-export const alert = (content: string) => {
-  const onClose = () => {
+export const modal = (content: ReactNode, buttons?: ReactElement[], afterClose?: () => void) => {
+  const closeModal = () => {
     ReactDOM.render(React.cloneElement(component, { visible: false }), div)
     ReactDOM.unmountComponentAtNode(div)
     div.remove()
@@ -68,8 +68,11 @@ export const alert = (content: string) => {
   const component = (
     <Dialog
       visible
-      onClose={onClose}
-      buttons={[<button onClick={onClose}>ok</button>]}
+      onClose={() => {
+        closeModal()
+        afterClose && afterClose()
+      }}
+      buttons={buttons}
     >
       {content}
     </Dialog>
@@ -77,53 +80,30 @@ export const alert = (content: string) => {
   const div = document.createElement('div')
   document.body.append(div)
   ReactDOM.render(component, div)
+  return closeModal
 }
-const x = () => {
-  
+
+export const alert = (content: string) => {
+  const buttons = [<button onClick={() => closeModal()}>ok</button>]
+  const closeModal = modal(content, buttons)
 }
-export const confirm = (content: string, yes?: () => void, no?: () => void) => {
+
+export const confirm = (
+  content: string,
+  confirmCallback?: () => void,
+  cancelCallback?: () => void,
+) => {
   const onYes = () => {
-    ReactDOM.render(React.cloneElement(component, { visible: false }), div)
-    ReactDOM.unmountComponentAtNode(div)
-    div.remove()
-    yes && yes()
+    closeModal()
+    confirmCallback && confirmCallback()
   }
   const onNo = () => {
-    ReactDOM.render(React.cloneElement(component, { visible: false }), div)
-    ReactDOM.unmountComponentAtNode(div)
-    div.remove()
-    no && no()
+    closeModal()
+    cancelCallback && cancelCallback()
   }
-
-  const component = (
-    <Dialog
-      visible
-      onClose={onNo}
-      buttons={[
-        <button onClick={onYes}>yes</button>,
-        <button onClick={onNo}>no</button>,
-      ]}
-    >
-      {content}
-    </Dialog>
-  )
-  const div = document.createElement('div')
-  document.body.appendChild(div)
-  ReactDOM.render(component, div)
-}
-export const modal = (content: ReactNode) => {
-  const onClose = () => {
-    ReactDOM.render(React.cloneElement(component, { visible: false }), div)
-    ReactDOM.unmountComponentAtNode(div)
-    div.remove()
-  }
-  const component = (
-    <Dialog onClose={onClose} visible>
-      {content}
-    </Dialog>
-  )
-  const div = document.createElement('div')
-  document.body.appendChild(div)
-  ReactDOM.render(component, div)
-  return onClose
+  const buttons = [
+    <button onClick={onNo}>no</button>,
+    <button onClick={onYes}>yes</button>,
+  ]
+  const closeModal = modal(content, buttons, onNo)
 }
