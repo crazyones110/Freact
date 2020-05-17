@@ -1,0 +1,22 @@
+@import "../helper";
+
+.freact-layout {
+  border: 1px solid red;
+  display: flex;
+  flex-direction: column;
+  & & {
+    flex-grow: 1;
+    border: 1px solid blue;
+    flex-direction: row;
+  }
+  &-has-sider {
+    flex-direction: row;
+    .freact-layout {
+      flex-direction: column;
+    }
+  }
+  &-content {
+    flex-grow: 1;
+    border: 1px solid green;
+  }
+}

@@ -59,7 +59,11 @@ Dialog.defaultProps = {
   closeMaskOnClick: false,
 }
 
-export const modal = (content: ReactNode, buttons?: ReactElement[], afterClose?: () => void) => {
+export const modal = (
+  content: ReactNode,
+  buttons?: ReactElement[],
+  afterClose?: () => void,
+) => {
   const closeModal = () => {
     ReactDOM.render(React.cloneElement(component, { visible: false }), div)
     ReactDOM.unmountComponentAtNode(div)
@@ -82,9 +86,8 @@ export const modal = (content: ReactNode, buttons?: ReactElement[], afterClose?:
   ReactDOM.render(component, div)
   return closeModal
 }
-
 export const alert = (content: string) => {
-  const buttons = [<button onClick={() => closeModal()}>ok</button>]
+  const buttons = [<button onClick={()=>closeModal()}>ok</button>]
   const closeModal = modal(content, buttons)
 }
 

@@ -1,5 +1,6 @@
 import { IconExample } from './lib/icon/Icon.example'
 import { DialogExample } from './lib/dialog/dialog.example'
+import { LayoutExample } from './lib/layout/layout.example'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -24,11 +25,15 @@ ReactDOM.render(
             <li>
               <Link to="/dialog">Dialog</Link>
             </li>
+            <li>
+              <Link to="/layout">Layout</Link>
+            </li>
           </ul>
         </aside>
         <main>
           <Route path="/icon" component={IconExample}></Route>
           <Route path="/dialog" component={DialogExample}></Route>
+          <Route path="/layout" component={LayoutExample}></Route>
         </main>
       </div>
     </div>
