@@ -1,4 +1,5 @@
 import { classnames } from '../classnames'
+import { createMakeClasses } from '../createMakeClasses'
 
 describe('classnames', () => {
   it('接受一个className', () => {
@@ -16,5 +17,15 @@ describe('classnames', () => {
   it('什么都不传', () => {
     const result = classnames()
     expect(result).toEqual('')
+  })
+})
+describe('createMakeClasses', () => {
+  it ('接受字符串或对象', () => {
+    const classes = createMakeClasses('freact-layout')
+    expect(classes()).toEqual('freact-layout')
+    expect(classes('x')).toEqual('freact-layout-x')
+    expect(classes({y:true, z: false})).toEqual('freact-layout-y')
+    expect(classes({y:true, z: true})).toEqual('freact-layout-y freact-layout-z')
+    expect(classes({y:true, z: true}, 'red')).toEqual('freact-layout-y freact-layout-z red')
   })
 })
