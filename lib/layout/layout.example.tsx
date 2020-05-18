@@ -10,46 +10,46 @@ export const LayoutExample: React.FC = props => {
   return (
     <div>
       <h1>第一个例子</h1>
-      <Layout style={{ height: '500px' }}>
-        <Header className="header"></Header>
-        <Content className="content"></Content>
-        <Footer></Footer>
+      <Layout style={{ height: 500, width: 500 }}>
+        <Header className="header">header</Header>
+        <Content className="content">content</Content>
+        <Footer className="footer">footer</Footer>
       </Layout>
       <h1>第二个例子</h1>
-      <Layout style={{ height: '500px' }} className="hi">
-        <Header></Header>
+      <Layout style={{ height: 500, width: 500 }} className="hi">
+        <Header className="header">header</Header>
         <Layout>
-          <Sider></Sider>
-          <Content></Content>
+          <Sider className="sider">sider</Sider>
+          <Content className="content">content</Content>
         </Layout>
-        <Footer></Footer>
+        <Footer className="footer">footer</Footer>
       </Layout>
       <h1>第三个例子</h1>
-      <Layout style={{ height: '500px' }} className="hi">
-        <Header></Header>
+      <Layout style={{ height: 500, width: 500 }} className="hi">
+        <Header className="header">header</Header>
         <Layout>
-          <Content></Content>
-          <Sider></Sider>
+          <Content className="content">content</Content>
+          <Sider className="sider"></Sider>
         </Layout>
-        <Footer></Footer>
+        <Footer className="footer">footer</Footer>
       </Layout>
       <h1>第四个例子</h1>
-      <Layout style={{ height: '500px' }} className="hi">
-        <Sider></Sider>
+      <Layout style={{ height: 500, width: 500 }} className="hi">
+        <Sider className="sider">sider</Sider>
         <Layout>
-          <Header></Header>
-          <Content></Content>
-          <Footer></Footer>
+          <Header className="header">header</Header>
+          <Content className="content">content</Content>
+          <Footer className="footer">footer</Footer>
         </Layout>
       </Layout>
       <h1>第五个例子</h1>
-      <Layout style={{ height: '500px' }} className="hi">
+      <Layout style={{ height: 500, width: 500 }} className="hi">
         <Layout>
-          <Header></Header>
-          <Content></Content>
-          <Footer></Footer>
+          <Header className="header">header</Header>
+          <Content className="content">content</Content>
+          <Footer className="footer">footer</Footer>
         </Layout>
-        <Sider></Sider>
+        <Sider className="sider">sider</Sider>
       </Layout>
     </div>
   )
