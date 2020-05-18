@@ -1,5 +1,6 @@
 import { DialogExample } from './lib/dialog/dialog.example'
 import { LayoutExample } from './lib/layout/layout.example'
+import { FormExample } from './lib/form/form.example'
 
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -38,12 +39,16 @@ ReactDOM.render(
             <li>
               <NavLink to="/layout">Layout</NavLink>
             </li>
+            <li>
+              <NavLink to="/form">Form</NavLink>
+            </li>
           </ul>
         </Sider>
         <Content>
           <Route path="/icon" component={IconDemo}></Route>
           <Route path="/dialog" component={DialogExample}></Route>
           <Route path="/layout" component={LayoutExample}></Route>
+          <Route path="/form" component={FormExample}></Route>
         </Content>
       </Layout>
       <Footer className="site-footer">
