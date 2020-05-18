@@ -2,6 +2,10 @@ import React, { ReactElement } from 'react'
 import { createMakeClasses } from '../../lib/helpers/createMakeClasses'
 import './layout.scss'
 import { Sider } from './sider'
+export { Header } from './header'
+export { Content } from './content'
+export { Footer } from './footer'
+export { Sider } from './sider'
 
 const classes = createMakeClasses('freact-layout')
 

@@ -1,9 +1,5 @@
 import React from 'react'
-import { Layout } from './layout'
-import { Header } from './header'
-import { Content } from './content'
-import { Footer } from './footer'
-import { Sider } from './sider'
+import { Layout, Header, Content, Footer, Sider } from './layout'
 import './layout.example.scss'
 
 export const LayoutExample: React.FC = props => {
