@@ -1,0 +1,9 @@
+.header {
+  background-color: #4b82f1;
+  height: 40px;
+  color: white;
+}
+.content {
+  background-color: lighten($color: #4b82f1, $amount: 10%);
+  color: white;
+}

@@ -4,17 +4,14 @@ interface ClassToggler {
 
 export function createMakeClasses(prefix: string) {
   return (className?: string | ClassToggler, ...extras: string[]): string => {
-    let result = ''
-    if (typeof className === 'string') {
-      result = prefix + '-' + className
-    } else if (typeof className === 'object') {
-      result = Object.entries(className)
-        .filter(([, v]) => v)
-        .map(([k]) => prefix + '-' + k)
-        .join(' ')
-    } else {
-      result = prefix
-    }
-    return extras.length === 0 ? result : result + ' ' + extras.join(' ')
+    const classObject =
+      typeof className === 'string' ? { [className]: true }
+        : className === undefined ? { ['']: true }
+        : className
+    return Object.entries(classObject)
+      .filter(([, v]) => v)
+      .map(([k]) => (k === '' ? prefix : prefix + '-' + k))
+      .concat(extras)
+      .join(' ')
   }
 }

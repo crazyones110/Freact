@@ -10,18 +10,13 @@ interface Props extends React.HTMLAttributes<HTMLElement> {
 }
 export const Layout: React.FC<Props> = ({ className, children, ...rest }) => {
   // FIXME 类型保护
-  if ((children as ReactElement[]).length) {
-    ;(children as ReactElement[]).forEach(child => {
-      if (child.type === Sider) {
-        hasSider = true
-      }
-    })
-    ;(children as ReactElement[]).reduce(
-      (result, child) => result || child.type === Sider,
-      false,
-    )
-    const hasSider = (children as ReactElement[]).some(child => child.type === Sider)
-  }
+  const childrenTemp = (length in children ? children : [children]) as ReactElement[]
+  // ;(children as ReactElement[]).reduce(
+  //   (result, child) => result || child.type === Sider,
+  //   false,
+  // )
+    
+  const hasSider = childrenTemp.some(child => child.type === Sider)
   return (
     <div
       className={[

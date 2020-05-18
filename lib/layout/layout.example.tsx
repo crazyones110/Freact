@@ -4,14 +4,15 @@ import { Header } from './header'
 import { Content } from './content'
 import { Footer } from './footer'
 import { Sider } from './sider'
+import './layout.example.scss'
 
 export const LayoutExample: React.FC = props => {
   return (
     <div>
       <h1>第一个例子</h1>
       <Layout style={{ height: '500px' }}>
-        <Header></Header>
-        <Content></Content>
+        <Header className="header"></Header>
+        <Content className="content"></Content>
         <Footer></Footer>
       </Layout>
       <h1>第二个例子</h1>
