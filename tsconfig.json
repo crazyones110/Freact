@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
+    "strict": true,
     "outDir": "dist",
     "declaration": true,
     "baseUrl": ".",
-    "module": "esnext",
+    "module": "ESNext",
     "target": "es5",
     "lib": ["es6", "dom"],
     "sourceMap": true,

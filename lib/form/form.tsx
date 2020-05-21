@@ -1,5 +1,6 @@
 import React, { ReactFragment } from 'react'
 import { FormErrors } from './validator'
+import { Input } from '../input/input'
 
 export interface Fields {
   name: string
@@ -40,7 +41,7 @@ export const Form: React.FC<Props> = ({
       {fields.map(field => (
         <div key={field.name}>
           {field.label}
-          <input
+          <Input
             type={field.input.type}
             value={formData[field.name]}
             onChange={(e) => onInputChange(field.name, e.target.value)}
