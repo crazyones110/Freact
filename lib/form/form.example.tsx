@@ -3,6 +3,9 @@ import { Form, FormData, Fields } from './form'
 import { Validator, FormRules } from './validator'
 import {Button} from '../button/button'
 
+// TODO 1. 嵌套表单 2. fileUploader(多种表单组件)如inputType: image
+// TODO 3. input可以自定义, 接受onChange和value
+
 const usernames = ['frank']
 const checkUserName = (username: string, success: ()=>void, fail:()=>void) => {
   setTimeout(() => {
