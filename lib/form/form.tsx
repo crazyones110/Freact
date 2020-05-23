@@ -1,5 +1,4 @@
 import React, { ReactFragment } from 'react'
-import { FormErrors } from './validator'
 import { Input } from '../input/input'
 import { createMakeClasses } from '../helpers/createMakeClasses'
 import './form.scss'
@@ -20,8 +19,9 @@ type Props = {
   buttons: ReactFragment
   onSubmit: React.FormEventHandler<HTMLFormElement>
   onChange: (value: FormData) => void
-  errors: FormErrors
+  errors: any
   errorsDisplayMode?: 'first' | 'all'
+  errorTranslation?: (msg: string) => string
 }
 const classes = createMakeClasses('freact-form')
 export const Form: React.FC<Props> = ({
@@ -32,6 +32,7 @@ export const Form: React.FC<Props> = ({
   onChange,
   errors,
   errorsDisplayMode = 'first',
+  errorTranslation
 }) => {
   const selfOnSubmit: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault()
@@ -41,31 +42,48 @@ export const Form: React.FC<Props> = ({
     const newFormData = { ...formData, [name]: value }
     onChange(newFormData)
   }
+  const transformError = (msg: string) => {
+    const map: {
+      [index: string]: string
+      required: string
+      minLength: string
+      maxLength: string
+      formatting: string
+    } = {
+      required: '必填',
+      minLength: '太短',
+      maxLength: '太长',
+      formatting: '格式错误',
+    }
+    return errorTranslation?.(msg) ?? map[msg] ?? '未知错误'
+  }
   return (
     <form onSubmit={selfOnSubmit}>
       <table className={classes('table')}>
-        {fields.map(field => (
-          <tr key={field.name} className={classes('tr')}>
-            <td className={classes('td')}>{field.label}</td>
-            <td className={classes('td')}>
-              <Input
-                className={classes('input')}
-                type={field.input.type}
-                value={formData[field.name]}
-                onChange={e => onInputChange(field.name, e.target.value)}
-              />
-              <div className={classes('error')}>
-                {errorsDisplayMode === 'first'
-                  ? errors[field.name]?.[0]
-                  : errors[field.name]?.join(',')}
-              </div>
-            </td>
+        <tbody>
+          {fields.map(field => (
+            <tr key={field.name} className={classes('tr')}>
+              <td className={classes('td')}>{field.label}</td>
+              <td className={classes('td')}>
+                <Input
+                  className={classes('input')}
+                  type={field.input.type}
+                  value={formData[field.name]}
+                  onChange={e => onInputChange(field.name, e.target.value)}
+                />
+                <div className={classes('error')}>
+                  {errorsDisplayMode === 'first'
+                    ? transformError(errors[field.name]?.[0])
+                    : errors[field.name]?.map(transformError).join(',')}
+                </div>
+              </td>
+            </tr>
+          ))}
+          <tr className={classes('tr')}>
+            <td className={classes('td')} />
+            <td className={classes('td')}>{buttons}</td>
           </tr>
-        ))}
-        <tr className={classes('tr')}>
-          <td className={classes('td')} />
-          <td className={classes('td')}>{buttons}</td>
-        </tr>
+        </tbody>
       </table>
     </form>
   )

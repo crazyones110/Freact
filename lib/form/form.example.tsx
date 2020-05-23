@@ -1,15 +1,15 @@
 import React, { useState } from 'react'
 import { Form, FormData, Fields } from './form'
-import { Validator, FormRules, FormErrors } from './validator'
+import { Validator, FormRules } from './validator'
 import {Button} from '../button/button'
 
-const usernames = ['frank', 'fan']
+const usernames = ['frank']
 const checkUserName = (username: string, success: ()=>void, fail:()=>void) => {
   setTimeout(() => {
     if (usernames.includes(username)) {
-      success()
-    } else {
       fail()
+    } else {
+      success()
     }
   }, 3000)
 }
@@ -24,7 +24,7 @@ export const FormExample: React.FC = props => {
     { name: 'password', label: '密码', input: { type: 'password' } },
     // 可以考虑input传一个函数,兼容antdesign,或者type自定义
   ])
-  const [errors, setErrors] = useState<FormErrors>({})
+  const [errors, setErrors] = useState<any>({})
   const onSubmit:React.FormEventHandler<HTMLFormElement> = () => {
     // axios.post('/signIn', formData).then(success, fail)
     const rules: FormRules = [
@@ -49,6 +49,13 @@ export const FormExample: React.FC = props => {
       setErrors(errors)
     })
   }
+  const transformError = (msg: string): string => {
+    const map:any = {
+      unique: '用户名已存在',
+      minLength: 'too short'
+    }
+    return map[msg]
+  }
   return (
     <div>
       {JSON.stringify(formData)}
@@ -66,6 +73,7 @@ export const FormExample: React.FC = props => {
         onChange={newValue=>setFormData(newValue)}
         errors={errors}
         errorsDisplayMode="all"
+        errorTranslation={transformError}
       />
 
     </div>

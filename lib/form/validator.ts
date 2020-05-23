@@ -12,60 +12,65 @@ interface FormRule {
 }
 export type FormRules = FormRule[]
 
-export interface FormErrors {
-  [K: string]: (string | Promise<any>)[]
-}
+// export interface FormErrors {
+//   [K: string]: (string | Promise<any>)[]
+// }
 
 function isEmpty(value: any): boolean {
   // TODO 判断数组
   return value === undefined || value === null || value === ''
 }
-
+interface Error {
+  msg: string
+  promise?: Promise<any>
+}
 export const Validator = (
   formData: FormData,
   rules: FormRules,
-  callback: (errors: FormErrors) => void,
+  callback: (errors: any) => void,
 ): void => {
-  const errors: FormErrors = {}
-  const addError = (key: string, msg: string | Promise<any>) => {
+  const errors: any = {}
+  const addError = (key: string, error: Error) => {
     if (errors[key] === undefined) {
       errors[key] = []
     }
-    errors[key].push(msg)
+    errors[key].push(error)
   }
   rules.map(rule => {
     const value = formData[rule.key]
     if (rule.validator) {
       // 自定义校验器
       const promise = rule.validator.validate(value)
-      addError(rule.key, promise)
+      addError(rule.key, { msg: rule.validator.name, promise })
     }
     if (rule.required) {
       if (isEmpty(value)) {
-        addError(rule.key, '必填')
+        addError(rule.key, { msg: 'required' })
       }
     }
     if (rule.minLength) {
       if (!isEmpty(value) && value.length < rule.minLength) {
-        addError(rule.key, '太短')
+        addError(rule.key, { msg: 'minLength' })
       }
     }
     if (rule.maxLength) {
       if (!isEmpty(value) && value.length > rule.maxLength) {
-        addError(rule.key, '太长')
+        addError(rule.key, { msg: 'maxLength' })
       }
     }
     if (rule.pattern && !isEmpty(value) && !rule.pattern.test(value)) {
-      addError(rule.key, '格式不正确')
+      addError(rule.key, { msg: 'formatting' })
     }
   })
-
-  Promise.all(flat(Object.values(errors)))
-    .then(
-      () => {callback(errors)},
-      () => {callback(errors)}
-    )
-  // return errors // 没完成的
+  const promiseList = flat(Object.values(errors))
+    .filter((item: any) => item.promise)
+    .map((item: any) => item.promise)
+  Promise.all(promiseList).finally(() => {
+    Object.keys(errors).forEach(key => {
+      errors[key] = errors[key].map((item: any) => item.msg)
+    })
+    callback(errors)
+  })
 }
 
 const flat = (array: any): any =>
