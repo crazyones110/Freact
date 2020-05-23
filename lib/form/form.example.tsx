@@ -1,10 +1,22 @@
 import React, { useState } from 'react'
 import { Form, FormData, Fields } from './form'
 import { Validator, FormRules, FormErrors } from './validator'
+import {Button} from '../button/button'
+
+const usernames = ['frank', 'fan']
+const checkUserName = (username: string, success: ()=>void, fail:()=>void) => {
+  setTimeout(() => {
+    if (usernames.includes(username)) {
+      success()
+    } else {
+      fail()
+    }
+  }, 3000)
+}
 
 export const FormExample: React.FC = props => {
   const [formData, setFormData] = useState<FormData>({
-    username: '',
+    username: 'fan',
     password: '',
   })
   const [fields] = useState<Fields[]>([
@@ -18,11 +30,24 @@ export const FormExample: React.FC = props => {
     const rules: FormRules = [
       {key: 'username', required: true},
       {key: 'username', minLength: 8, maxLength: 16},
+      {
+        key: 'username', validator: {
+          name: 'unique',
+          validate(username: string) {
+            console.log('有人调用validate了')
+            return new Promise((resolve, reject) => {
+              checkUserName(username, resolve, reject)
+            })
+          }
+        }
+      },
       {key: 'username', pattern: /^[a-zA-Z0-9]+$/},
       {key: 'password', required: true},
     ]
-    const errors = Validator(formData, rules)
-    setErrors(errors)
+    Validator(formData, rules, (errors) => {
+      console.log(errors)
+      setErrors(errors)
+    })
   }
   return (
     <div>
@@ -33,13 +58,14 @@ export const FormExample: React.FC = props => {
         buttons={
           // 这里可以考虑改成renderProps,把onSubmit接口暴露给用户
           <>
-            <button type="submit">提交</button>
-            <button>返回</button>
+            <Button type="submit" level="important">提交</Button>
+            <Button>返回</Button>
           </>
         }
         onSubmit={onSubmit}
         onChange={newValue=>setFormData(newValue)}
         errors={errors}
+        errorsDisplayMode="all"
       />
 
     </div>

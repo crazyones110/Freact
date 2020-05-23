@@ -1,0 +1,26 @@
+.freact-form {
+  &-table {
+    border-collapse: collapse;
+  }
+  &-tr:first-child &-td {
+    padding-top: 0;
+  }
+  &-tr:last-child &-td {
+    padding-bottom: 0;
+  }
+  &-td {
+    position: relative;
+    padding: {
+      // top: 16px;
+      bottom: 32px;
+    }
+  }
+  &-td + &-td {
+    padding-left: 16px;
+  }
+  &-error {
+    position: absolute;
+    color: red;
+    font-size: 0.8em;
+  }
+}
