@@ -68,14 +68,15 @@ export const Validator = (
     }
     callback(errors as Errors)
   })()
-  // callback(
-  //   Object.fromEntries(
-  //     // @ts-ignore
-  //     Object.entries(errors).map(async ([k, v]) => {
-  //       // @ts-ignore
-  //       const syncResult = (await Promise.all(v)).filter(Boolean)
-  //       return [k, syncResult]
-  //     }),
-  //   ),
-  // )
+
+  // another solution
+  // ;(async function () {
+  //   callback(
+  //     Object.fromEntries(
+  //       await Promise.all(Object.entries(errors).map(async ([key, values]) =>
+  //         [key, (await Promise.all(values)).filter(Boolean)]
+  //       ))
+  //     )
+  //   )
+  // })()
 }
