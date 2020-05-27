@@ -3,7 +3,7 @@ import { Input } from '../input/input'
 import { createMakeClasses } from '../helpers/createMakeClasses'
 import './form.scss'
 
-export interface Fields {
+export interface Field {
   name: string
   label: string
   input: {
@@ -13,15 +13,18 @@ export interface Fields {
 export interface FormData {
   [K: string]: string
 }
+export interface Errors {
+  [K: string]: string[]
+}
 type Props = {
   value: FormData
-  fields: Fields[]
+  fields: Field[]
   buttons: ReactFragment
   onSubmit: React.FormEventHandler<HTMLFormElement>
   onChange: (value: FormData) => void
-  errors: any
+  errors: Errors
   errorsDisplayMode?: 'first' | 'all'
-  errorTranslation?: (msg: string) => string
+  errorTranslation?: (msg: string) => string | undefined
 }
 const classes = createMakeClasses('freact-form')
 export const Form: React.FC<Props> = ({
@@ -32,7 +35,7 @@ export const Form: React.FC<Props> = ({
   onChange,
   errors,
   errorsDisplayMode = 'first',
-  errorTranslation
+  errorTranslation,
 }) => {
   const selfOnSubmit: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault()

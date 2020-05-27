@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Form, FormData, Fields } from './form'
+import { Form, FormData, Field, Errors } from './form'
 import { Validator, FormRules } from './validator'
 import { Button } from '../button/button'
 
@@ -26,15 +26,12 @@ export const FormExample: React.FC = props => {
     username: 'fan',
     password: '',
   })
-  const [fields] = useState<Fields[]>([
+  const [fields] = useState<Field[]>([
     { name: 'username', label: '用户名', input: { type: 'text' } },
     { name: 'password', label: '密码', input: { type: 'password' } },
     // 可以考虑input传一个函数,兼容antdesign,或者type自定义
   ])
-  const [errors, setErrors] = useState<any>({
-    // username: ['hhh'],
-    // password: ['jjj']
-  })
+  const [errors, setErrors] = useState<Errors>({})
   const validator = (username: string) => {
     return new Promise<string>((resolve, reject) => {
       checkUserName(username, resolve, () => reject('unique'))
@@ -57,8 +54,10 @@ export const FormExample: React.FC = props => {
       setErrors(errors)
     })
   }
-  const transformError = (msg: string): string => {
-    const map: any = {
+  const transformError = (msg: string): string | undefined => {
+    const map: {
+      [K: string]: string
+    } = {
       unique: '用户名已存在',
       minLength: 'too short',
     }

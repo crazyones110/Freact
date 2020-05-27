@@ -1,4 +1,4 @@
-import { FormData } from './form'
+import { FormData, Errors } from './form'
 interface FormRule {
   key: string
   required?: boolean
@@ -9,21 +9,20 @@ interface FormRule {
 }
 export type FormRules = FormRule[]
 
-// export interface FormErrors {
-//   [K: string]: (string | Promise<any>)[]
-// }
-
-function isEmpty(value: any): boolean {
+function isEmpty(value: unknown): boolean {
   // TODO 判断数组
   return value === undefined || value === null || value === ''
 }
 type OneError = string | Promise<string>
+
 export const Validator = (
   formData: FormData,
   rules: FormRules,
-  callback: (errors: any) => void,
+  callback: (errors: Errors) => void,
 ): void => {
-  const errors: any = {}
+  const errors: {
+    [key: string]: OneError[]
+  } = {}
   const addError = (key: string, error: OneError) => {
     if (errors[key] === undefined) {
       errors[key] = []
@@ -59,7 +58,7 @@ export const Validator = (
       addError(rule.key, 'formatting')
     }
   })
-  
+
   // 正解
   ;(async function () {
     for (const key in errors) {
@@ -67,7 +66,7 @@ export const Validator = (
         errors[key] = (await Promise.all(errors[key])).filter(Boolean)
       }
     }
-    callback(errors)
+    callback(errors as Errors)
   })()
   // callback(
   //   Object.fromEntries(
