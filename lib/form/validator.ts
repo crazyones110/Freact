@@ -5,10 +5,7 @@ interface FormRule {
   minLength?: number
   maxLength?: number
   pattern?: RegExp
-  validator?: {
-    name: string
-    validate(inputValue: string): Promise<void>
-  }
+  validator?(value: string): Promise<string>
 }
 export type FormRules = FormRule[]
 
@@ -20,64 +17,66 @@ function isEmpty(value: any): boolean {
   // TODO 判断数组
   return value === undefined || value === null || value === ''
 }
-interface Error {
-  msg: string
-  promise?: Promise<any>
-}
+type OneError = string | Promise<string>
 export const Validator = (
   formData: FormData,
   rules: FormRules,
   callback: (errors: any) => void,
 ): void => {
   const errors: any = {}
-  const addError = (key: string, error: Error) => {
+  const addError = (key: string, error: OneError) => {
     if (errors[key] === undefined) {
       errors[key] = []
     }
     errors[key].push(error)
   }
-  rules.map(rule => {
+  rules.forEach(rule => {
     const value = formData[rule.key]
     if (rule.validator) {
       // 自定义校验器
-      const promise = rule.validator.validate(value)
-      addError(rule.key, { msg: rule.validator.name, promise })
+      const promise = rule.validator(value)
+      addError(
+        rule.key,
+        promise.catch(errorMsg => errorMsg),
+      )
     }
     if (rule.required) {
       if (isEmpty(value)) {
-        addError(rule.key, { msg: 'required' })
+        addError(rule.key, 'required')
       }
     }
     if (rule.minLength) {
       if (!isEmpty(value) && value.length < rule.minLength) {
-        addError(rule.key, { msg: 'minLength' })
+        addError(rule.key, 'minLength')
       }
     }
     if (rule.maxLength) {
       if (!isEmpty(value) && value.length > rule.maxLength) {
-        addError(rule.key, { msg: 'maxLength' })
+        addError(rule.key, 'maxLength')
       }
     }
     if (rule.pattern && !isEmpty(value) && !rule.pattern.test(value)) {
-      addError(rule.key, { msg: 'formatting' })
+      addError(rule.key, 'formatting')
     }
   })
-  const promiseList = flat(Object.values(errors))
-    .filter((item: any) => item.promise)
-    .map((item: any) => item.promise)
-  Promise.all(promiseList).finally(() => {
-    Object.keys(errors).forEach(key => {
-      errors[key] = errors[key].map((item: any) => item.msg)
-    })
+  
+  // 正解
+  ;(async function () {
+    for (const key in errors) {
+      if (errors.hasOwnProperty(key)) {
+        errors[key] = (await Promise.all(errors[key])).filter(Boolean)
+      }
+    }
     callback(errors)
-  })
+  })()
+  // callback(
+  //   Object.fromEntries(
+  //     // @ts-ignore
+  //     Object.entries(errors).map(async ([k, v]) => {
+  //       // @ts-ignore
+  //       const syncResult = (await Promise.all(v)).filter(Boolean)
+  //       return [k, syncResult]
+  //     }),
+  //   ),
+  // )
 }
-
-const flat = (array: any): any =>
-  array.reduce(
-    (resultArr: any, current: any) =>
-      Array.isArray(current)
-        ? resultArr.concat(current)
-        : [...resultArr, current],
-    [],
-  )
