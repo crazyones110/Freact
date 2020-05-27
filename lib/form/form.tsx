@@ -16,6 +16,11 @@ export interface FormData {
 export interface Errors {
   [K: string]: string[]
 }
+
+export interface Validation {
+  fields: string[]
+  status: 'notSubmitted' | 'validating' | 'validated'
+}
 type Props = {
   value: FormData
   fields: Field[]
@@ -25,6 +30,7 @@ type Props = {
   errors: Errors
   errorsDisplayMode?: 'first' | 'all'
   errorTranslation?: (msg: string) => string | undefined
+  validation?: Validation
 }
 const classes = createMakeClasses('freact-form')
 export const Form: React.FC<Props> = ({
@@ -36,6 +42,7 @@ export const Form: React.FC<Props> = ({
   errors,
   errorsDisplayMode = 'first',
   errorTranslation,
+  validation,
 }) => {
   const selfOnSubmit: React.FormEventHandler<HTMLFormElement> = e => {
     e.preventDefault()
@@ -74,6 +81,12 @@ export const Form: React.FC<Props> = ({
                   value={formData[field.name]}
                   onChange={e => onInputChange(field.name, e.target.value)}
                 />
+                {validation?.fields.includes(field.name) && (
+                  <div className={classes('validate-status')}>
+                    {validation?.status === 'validating' && 'validating'}
+                    {validation?.status === 'validated' && 'passed'}
+                  </div>
+                )}
                 <div className={classes('error')}>
                   {errorsDisplayMode === 'first'
                     ? transformError(errors[field.name]?.[0])

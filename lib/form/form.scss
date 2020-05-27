@@ -23,4 +23,9 @@
     color: red;
     font-size: 0.8em;
   }
+  &-validate-status {
+    position: absolute;
+    right: 0;
+    top: 4px;
+  }
 }

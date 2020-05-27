@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
-import { Form, FormData, Field, Errors } from './form'
+import { Form, FormData, Field, Errors, Validation } from './form'
 import { Validator, FormRules } from './validator'
 import { Button } from '../button/button'
 
 // TODO 1. 嵌套表单 2. fileUploader(多种表单组件)如inputType: image
 // TODO 3. input可以自定义, 接受onChange和value
+// TODO 4. 异步校验增加validating status
 
 const usernames = ['frank', 'fan']
 const checkUserName = (
@@ -31,6 +32,10 @@ export const FormExample: React.FC = props => {
     { name: 'password', label: '密码', input: { type: 'password' } },
     // 可以考虑input传一个函数,兼容antdesign,或者type自定义
   ])
+  const [validation, setValidation] = useState<Validation>({
+    fields: ['username', 'password'],
+    status: 'notSubmitted'
+  })
   const [errors, setErrors] = useState<Errors>({})
   const validator = (username: string) => {
     return new Promise<string>((resolve, reject) => {
@@ -39,6 +44,10 @@ export const FormExample: React.FC = props => {
   }
   const onSubmit: React.FormEventHandler<HTMLFormElement> = () => {
     // axios.post('/signIn', formData).then(success, fail)
+    setValidation({
+      ...validation,
+      status: 'validating'
+    })
     const rules: FormRules = [
       { key: 'username', required: true },
       { key: 'username', minLength: 8, maxLength: 16 },
@@ -50,7 +59,10 @@ export const FormExample: React.FC = props => {
       { key: 'password', validator },
     ]
     Validator(formData, rules, errors => {
-      console.log(errors, 'errors')
+      setValidation({
+        ...validation,
+        status: 'validated'
+      })
       setErrors(errors)
     })
   }
@@ -83,6 +95,7 @@ export const FormExample: React.FC = props => {
         errors={errors}
         errorsDisplayMode="all"
         errorTranslation={transformError}
+        validation={validation}
       />
     </div>
   )
